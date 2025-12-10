@@ -19,6 +19,16 @@
       "aliases": ["Assembly", "assembly"],
       "filenames": [],
       "configuration": "./language-configuration.json"
+    }],
+    "grammars": [{
+      "language": "assembly",
+      "scopeName": "source.assembly",
+      "path": "./syntaxes/assembly.tmLanguage.json"
+    }],
+    "themes": [{
+      "label": "Assembly Dark",
+      "uiTheme": "vs-dark",
+      "path": "./themes/assembly-dark.json"
     }]
   },
   "scripts": {

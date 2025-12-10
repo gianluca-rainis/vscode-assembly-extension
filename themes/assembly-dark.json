@@ -1,0 +1,113 @@
+{
+  "name": "Assembly Dark",
+  "type": "dark",
+  "colors": {
+    "editor.background": "#1e1e1e",
+    "editor.foreground": "#d4d4d4",
+    "editor.lineNumberColor": "#858585",
+    "editor.lineHighlightBackground": "#2d2d30",
+    "editor.selectionBackground": "#264f78",
+    "editor.inactiveSelectionBackground": "#3f3f46",
+    "editorCursor.foreground": "#aeafad",
+    "editorWhitespace.foreground": "#3e3e42",
+    "editorIndentGuide.background": "#3e3e42",
+    "editor.wordHighlightBackground": "#575757",
+    "editorBracketMatch.background": "#0064e4",
+    "editorBracketMatch.border": "#0064e4"
+  },
+  "tokenColors": [
+    {
+      "name": "Comment",
+      "scope": [
+        "comment.line.semicolon.assembly",
+        "comment.line.hash.assembly",
+        "comment.block.assembly"
+      ],
+      "settings": {
+        "foreground": "#6a9955",
+        "fontStyle": "italic"
+      }
+    },
+    {
+      "name": "String",
+      "scope": [
+        "string.quoted.double.assembly",
+        "string.quoted.single.assembly",
+        "string.quoted.grave.assembly"
+      ],
+      "settings": {
+        "foreground": "#ce9178"
+      }
+    },
+    {
+      "name": "String Escape",
+      "scope": "constant.character.escape.assembly",
+      "settings": {
+        "foreground": "#d7ba7d"
+      }
+    },
+    {
+      "name": "Number Decimal",
+      "scope": "constant.numeric.decimal.assembly",
+      "settings": {
+        "foreground": "#b5cea8"
+      }
+    },
+    {
+      "name": "Number Hex",
+      "scope": "constant.numeric.hex.assembly",
+      "settings": {
+        "foreground": "#b5cea8",
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "name": "Number Binary",
+      "scope": "constant.numeric.binary.assembly",
+      "settings": {
+        "foreground": "#b5cea8",
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "name": "Number Octal",
+      "scope": "constant.numeric.octal.assembly",
+      "settings": {
+        "foreground": "#b5cea8",
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "name": "Label",
+      "scope": "entity.name.label.assembly",
+      "settings": {
+        "foreground": "#00bdcf",
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "name": "Instruction/Mnemonic",
+      "scope": "keyword.mnemonic.assembly",
+      "settings": {
+        "foreground": "#569cd6",
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "name": "Register",
+      "scope": "variable.register.assembly",
+      "settings": {
+        "foreground": "#c586c0",
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "name": "Directive",
+      "scope": "keyword.directive.assembly",
+      "settings": {
+        "foreground": "#d7ba7d",
+        "fontStyle": "bold"
+      }
+    }
+  ]
+}
