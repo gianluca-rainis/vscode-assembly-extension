@@ -13,6 +13,9 @@
   "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
+    "commands": [
+      
+    ],
     "languages": [{
       "id": "assembly",
       "extensions": [".s", ".asm"],
@@ -29,7 +32,28 @@
       "label": "Assembly Dark",
       "uiTheme": "vs-dark",
       "path": "./themes/assembly-dark.json"
-    }]
+    }],
+    "semanticTokenTypes": [
+      {
+        "id": "labelDefinition",
+        "superType": "entity",
+        "description": "Assembly label definition"
+      },
+      {
+        "id": "labelReference",
+        "superType": "entity",
+        "description": "Assembly label reference"
+      }
+    ],
+    "semanticTokenScopes": [
+      {
+        "language": "assembly",
+        "scopes": {
+          "labelDefinition": ["entity.name.label.assembly"],
+          "labelReference": ["entity.name.label.assembly"]
+        }
+      }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",

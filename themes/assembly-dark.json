@@ -117,5 +117,16 @@
         "fontStyle": "bold"
       }
     }
-  ]
+  ],
+  "semanticHighlighting": true,
+  "semanticTokenColors": {
+    "labelDefinition": {
+      "foreground": "#00bdcf",
+      "fontStyle": "bold"
+    },
+    "labelReference": {
+      "foreground": "#00bdcf",
+      "fontStyle": "bold"
+    }
+  }
 }
