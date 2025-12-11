@@ -25,7 +25,15 @@
     ["`", "`"]
   ],
   "indentationRules": {
-    "increaseIndentPattern": "^\\s*([a-zA-Z_][a-zA-Z0-9_]*:)?\\b"
+    "increaseIndentPattern": "^\\s*[a-zA-Z_][a-zA-Z0-9_]*:\\s*$"
   },
+  "onEnterRules": [
+    {
+      "beforeText": "^\\s*[a-zA-Z_][a-zA-Z0-9_]*:\\s*$",
+      "action": {
+        "indent": "indent"
+      }
+    }
+  ],
   "wordPattern": "\\b[a-zA-Z_][a-zA-Z0-9_]*\\b|0x[0-9a-fA-F]+|\\d+"
 }

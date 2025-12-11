@@ -12,8 +12,8 @@
     "editorWhitespace.foreground": "#3e3e42",
     "editorIndentGuide.background": "#3e3e42",
     "editor.wordHighlightBackground": "#575757",
-    "editorBracketMatch.background": "#0064e4",
-    "editorBracketMatch.border": "#0064e4"
+    "editorBracketMatch.background": "#1e1e1e",
+    "editorBracketMatch.border": "#d4d4d4"
   },
   "tokenColors": [
     {
@@ -82,6 +82,14 @@
       "scope": "entity.name.label.assembly",
       "settings": {
         "foreground": "#00bdcf",
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "name": "Instruction/Assembler",
+      "scope": "keyword.assembler.assembly",
+      "settings": {
+        "foreground": "#eba236",
         "fontStyle": "bold"
       }
     },
