@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { ErrorDetector } from './errorDetector';
 
 const tokenTypes = ['labelDefinition', 'labelReference', 'variableDefinition', 'variableReference'];
 const tokenModifiers: string[] = [];
@@ -74,7 +75,8 @@ const provider: vscode.DocumentSemanticTokensProvider = {
 
                 tokensBuilder.push(new vscode.Range(lineIndex, startChar, lineIndex, startChar + name.length), definitionType);
               }
-            } else {
+            }
+            else {
               const match = codepart.match(defPattern);
 
               if (match) {
@@ -279,7 +281,8 @@ const provider: vscode.DocumentSemanticTokensProvider = {
                 inDefvars = true;
                 braceDepth = 1;
               }
-            } else {
+            }
+            else {
               // Update brace depth
               const opens = (codepart.match(/\{/g) || []).length;
               const closes = (codepart.match(/\}/g) || []).length;
@@ -385,6 +388,32 @@ export function activate(context: vscode.ExtensionContext) {
 	// Register the Semantic Token Provider for Assembly
   try {
     vscode.languages.registerDocumentSemanticTokensProvider(selector, provider, legend);
+  } catch (error) {
+    console.error("[Assembly][Error] " + error);
+  }
+
+  try {
+    // Setup diagnostics and wire ErrorDetector
+    const diagnostics = vscode.languages.createDiagnosticCollection('assembly');
+    context.subscriptions.push(diagnostics);
+
+    const errorDetector = new ErrorDetector(context, "Z80");
+
+    function runValidate(doc: vscode.TextDocument) {
+      errorDetector.validate(doc, diagnostics).catch(error => console.error('[Assembly][Error] Validation failed: ', error));
+    }
+
+    const active = vscode.window.activeTextEditor?.document;
+
+    if (active) {
+      runValidate(active);
+    }
+
+    context.subscriptions.push(
+      vscode.workspace.onDidChangeTextDocument(e => runValidate(e.document)),
+      vscode.workspace.onDidOpenTextDocument(doc => runValidate(doc)),
+      vscode.workspace.onDidSaveTextDocument(doc => runValidate(doc))
+    );
   } catch (error) {
     console.error("[Assembly][Error] " + error);
   }

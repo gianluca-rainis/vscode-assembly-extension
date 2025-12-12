@@ -48,6 +48,16 @@
         "id": "labelReference",
         "superType": "entity",
         "description": "Assembly label reference"
+      },
+      {
+        "id": "variableDefinition",
+        "superType": "entity",
+        "description": "Assembly variable definition"
+      },
+      {
+        "id": "variableReference",
+        "superType": "entity",
+        "description": "Assembly variable reference"
       }
     ],
     "semanticTokenScopes": [
@@ -55,7 +65,9 @@
         "language": "assembly",
         "scopes": {
           "labelDefinition": ["entity.name.label.assembly"],
-          "labelReference": ["entity.name.label.assembly"]
+          "labelReference": ["entity.name.label.assembly"],
+          "variableDefinition": ["entity.name.variable.assembly"],
+          "variableReference": ["entity.name.variable.assembly"]
         }
       }
     ]
