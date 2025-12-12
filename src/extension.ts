@@ -243,11 +243,128 @@ const provider: vscode.DocumentSemanticTokensProvider = {
         }
       }
 
+      function handleDefvarsBlocks() {
+        try {
+          const defvarsDefinitions = new Set<string>();
+
+          let inDefvars = false;
+          let braceDepth = 0;
+
+          // Get definitions in DEFVARS
+          lines.forEach((line, lineIndex) => {
+            // Remove comments
+            const commentIndex = line.indexOf(';');
+            const hashCommentIndex = line.indexOf('#');
+            const firstCommentIndex = Math.min(
+              commentIndex === -1 ? Infinity : commentIndex,
+              hashCommentIndex === -1 ? Infinity : hashCommentIndex
+            );
+
+            const codepart = firstCommentIndex === Infinity ? line : line.substring(0, firstCommentIndex);
+
+            // Remove from strings
+            const stringRanges: Array<{ start: number; end: number }> = [];
+            const stringRegex = /"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`/g;
+            let sMatch;
+
+            while ((sMatch = stringRegex.exec(codepart)) !== null) {
+              stringRanges.push({ start: sMatch.index, end: sMatch.index + sMatch[0].length });
+            }
+
+            // Enter DEFVARS block
+            if (!inDefvars) {
+              const startMatch = codepart.match(/\bDEFVARS\b[^\{]*\{/i);
+
+              if (startMatch) {
+                inDefvars = true;
+                braceDepth = 1;
+              }
+            } else {
+              // Update brace depth
+              const opens = (codepart.match(/\{/g) || []).length;
+              const closes = (codepart.match(/\}/g) || []).length;
+              braceDepth += opens - closes;
+
+              if (braceDepth <= 0) {
+                inDefvars = false;
+                braceDepth = 0;
+              }
+
+              if (inDefvars) {
+                // Try DS.*
+                let matchFound = codepart.match(/^\s*([a-zA-Z_][a-zA-Z0-9_]*)\s+DS\.[BWLD]/i);
+
+                if (!matchFound) {
+                  // If not DS.*
+                  matchFound = codepart.match(/^\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*$/);
+                }
+
+                if (matchFound) {
+                  const name = matchFound[1];
+                  const isInAString = stringRanges.some(row => {
+                    const indexInCodepart = codepart.indexOf(name);
+                    
+                    return indexInCodepart >= row.start && indexInCodepart < row.end;
+                  });
+
+                  if (name && !isInAString) {
+                    defvarsDefinitions.add(name);
+
+                    const startChar = codepart.indexOf(name);
+
+                    if (startChar >= 0) {
+                      tokensBuilder.push(new vscode.Range(lineIndex, startChar, lineIndex, startChar + name.length), 'variableDefinition');
+                    }
+                  }
+                }
+              }
+            }
+          });
+
+          // References
+          lines.forEach((line, lineIndex) => {
+            const commentIndex = line.indexOf(';');
+            const hashCommentIndex = line.indexOf('#');
+            const firstCommentIndex = Math.min(
+              commentIndex === -1 ? Infinity : commentIndex,
+              hashCommentIndex === -1 ? Infinity : hashCommentIndex
+            );
+
+            const codepart = firstCommentIndex === Infinity ? line : line.substring(0, firstCommentIndex);
+
+            const stringRanges: Array<{ start: number; end: number }> = [];
+            const stringRegex = /"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`/g;
+            let stringMatch;
+
+            while ((stringMatch = stringRegex.exec(codepart)) !== null) {
+              stringRanges.push({ start: stringMatch.index, end: stringMatch.index + stringMatch[0].length });
+            }
+
+            const refPattern = /\b([a-zA-Z_][a-zA-Z0-9_]*)\b/g;
+            let refMatch: any;
+
+            refPattern.lastIndex = 0;
+
+            while ((refMatch = refPattern.exec(codepart)) !== null) {
+              const id = refMatch[1];
+              const insideString = stringRanges.some(r => refMatch.index >= r.start && refMatch.index < r.end);
+
+              if (!insideString && defvarsDefinitions.has(id)) {
+                tokensBuilder.push(new vscode.Range(lineIndex, refMatch.index, lineIndex, refMatch.index + id.length), 'variableReference');
+              }
+            }
+          });
+        } catch (error) {
+          console.error("[Assembly][Error][Provide Semantic Tokens] " + error);
+        }
+      }
+
       foundAndPrepareDefinitionsAndReferences(/^\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*:/, /\b([a-zA-Z_][a-zA-Z0-9_]*)\b/g, 'labelDefinition', 'labelReference');
       foundAndPrepareDefinitionsAndReferences(/^\s*([a-zA-Z_][a-zA-Z0-9_]*)\s+([eE][qQ][uU])\b/, /\b([a-zA-Z_][a-zA-Z0-9_]*)\b/g, 'variableDefinition', 'variableReference');
       foundAndPrepareDefinitionsAndReferences(/(?:^|\s)(?:include|seek|extern|public|define|section|defc|defs|defm|defw|defgroup|defvars|macro)\s+([a-zA-Z_][a-zA-Z0-9_]*)/gi, /\b([a-zA-Z_][a-zA-Z0-9_]*)\b/g, 'variableDefinition', 'variableReference', true);
       foundAndPrepareDefinitionsAndReferences(/^\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*=\s*/g, /\b([a-zA-Z_][a-zA-Z0-9_]*)\b/g, 'variableDefinition', 'variableReference');
       foundAndPrepareDefinitionsAndReferences(/^\s*([a-zA-Z_][a-zA-Z0-9_]*)\s+DS\.[BWLD]/gi, /\b([a-zA-Z_][a-zA-Z0-9_]*)\b/g, 'variableDefinition', 'variableReference');
+      handleDefvarsBlocks();
       handleMacroParams();
 
       return tokensBuilder.build();

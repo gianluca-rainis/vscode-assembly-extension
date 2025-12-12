@@ -119,12 +119,7 @@
       "patterns": [
         {
           "name": "keyword.assembler.assembly",
-          "match": "(?i)\\b(org|end|bits|equ|db|dw|ds|defb|dm|defm|defw|defs|seek|include|if|ifndef|else|endif|macro|endm|incbin|times|extern|section|public|rept|repti|endr|defc|align|define|defgroup|defvars)\\b",
-          "captures": {
-            "1": {
-              "name": "keyword.assembler.assembly"
-            }
-          }
+          "match": "(?i)\\b(org|end|bits|equ|db|dw|ds|defb|dm|defm|defw|defs|seek|include|if|ifndef|else|endif|macro|endm|incbin|times|extern|section|public|rept|repti|endr|defc|align|define|defgroup|defvars)\\b"
         }
       ]
     },
