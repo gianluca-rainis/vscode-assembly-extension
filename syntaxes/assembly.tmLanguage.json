@@ -25,9 +25,6 @@
     },
     {
       "include": "#registers"
-    },
-    {
-      "include": "#directives"
     }
   ],
   "repository": {
@@ -119,7 +116,7 @@
       "patterns": [
         {
           "name": "keyword.assembler.assembly",
-          "match": "(?i)\\b(org|end|bits|equ|db|word)\\b",
+          "match": "(?i)\\b(org|end|bits|equ|db|word|times|$)\\b",
           "captures": {
             "1": {
               "name": "keyword.assembler.assembly"

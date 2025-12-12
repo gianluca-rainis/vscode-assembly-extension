@@ -32,6 +32,11 @@
       "label": "Assembly Dark",
       "uiTheme": "vs-dark",
       "path": "./themes/assembly-dark.json"
+    },
+    {
+      "label": "Assembly Light",
+      "uiTheme": "vs",
+      "path": "./themes/assembly-light.json"
     }],
     "semanticTokenTypes": [
       {

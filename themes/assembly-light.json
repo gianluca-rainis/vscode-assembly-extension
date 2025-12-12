@@ -1,19 +1,19 @@
 {
-  "name": "Assembly Dark",
-  "type": "dark",
+  "name": "Assembly Light",
+  "type": "light",
   "colors": {
-    "editor.background": "#1e1e1e",
-    "editor.foreground": "#d4d4d4",
+    "editor.background": "#E9E9E9FF",
+    "editor.foreground": "#1e1e1e",
     "editor.lineNumberColor": "#858585",
-    "editor.lineHighlightBackground": "#2d2d30",
-    "editor.selectionBackground": "#264f78",
-    "editor.inactiveSelectionBackground": "#3f3f46",
-    "editorCursor.foreground": "#aeafad",
-    "editorWhitespace.foreground": "#3e3e42",
+    "editor.lineHighlightBackground": "#C4C4C4FF",
+    "editor.selectionBackground": "#9FB9D3FF",
+    "editor.inactiveSelectionBackground": "#BEBEBEFF",
+    "editorCursor.foreground": "#585858FF",
+    "editorWhitespace.foreground": "#2B2B2EFF",
     "editorIndentGuide.background": "#3e3e42",
-    "editor.wordHighlightBackground": "#575757",
-    "editorBracketMatch.background": "#1e1e1e",
-    "editorBracketMatch.border": "#d4d4d4"
+    "editor.wordHighlightBackground": "#9B9B9BFF",
+    "editorBracketMatch.background": "#d4d4d4",
+    "editorBracketMatch.border": "#000000FF"
   },
   "tokenColors": [
     {
@@ -24,7 +24,7 @@
         "comment.block.assembly"
       ],
       "settings": {
-        "foreground": "#6a9955",
+        "foreground": "#007022FF",
         "fontStyle": "italic"
       }
     },
@@ -36,28 +36,28 @@
         "string.quoted.grave.assembly"
       ],
       "settings": {
-        "foreground": "#ce9178"
+        "foreground": "#BD5500FF"
       }
     },
     {
       "name": "String Escape",
       "scope": "constant.character.escape.assembly",
       "settings": {
-        "foreground": "#d7ba7d"
+        "foreground": "#7C5D06FF"
       }
     },
     {
       "name": "Number Decimal",
       "scope": "constant.numeric.decimal.assembly",
       "settings": {
-        "foreground": "#b5cea8"
+        "foreground": "#40B800FF"
       }
     },
     {
       "name": "Number Hex",
       "scope": "constant.numeric.hex.assembly",
       "settings": {
-        "foreground": "#b5cea8",
+        "foreground": "#40B800FF",
         "fontStyle": "bold"
       }
     },
@@ -65,7 +65,7 @@
       "name": "Number Binary",
       "scope": "constant.numeric.binary.assembly",
       "settings": {
-        "foreground": "#b5cea8",
+        "foreground": "#40B800FF",
         "fontStyle": "bold"
       }
     },
@@ -73,7 +73,7 @@
       "name": "Number Octal",
       "scope": "constant.numeric.octal.assembly",
       "settings": {
-        "foreground": "#b5cea8",
+        "foreground": "#40B800FF",
         "fontStyle": "bold"
       }
     },
@@ -81,7 +81,7 @@
       "name": "Label",
       "scope": "entity.name.label.assembly",
       "settings": {
-        "foreground": "#00bdcf",
+        "foreground": "#00A6CFFF",
         "fontStyle": "bold"
       }
     },
@@ -89,7 +89,7 @@
       "name": "Variable",
       "scope": "entity.name.variable.assembly",
       "settings": {
-        "foreground": "#c3db58",
+        "foreground": "#677200FF",
         "fontStyle": "bold"
       }
     },
@@ -97,7 +97,7 @@
       "name": "Instruction/Assembler",
       "scope": "keyword.assembler.assembly",
       "settings": {
-        "foreground": "#eba236",
+        "foreground": "#D68100FF",
         "fontStyle": "bold"
       }
     },
@@ -105,7 +105,7 @@
       "name": "Instruction/Mnemonic",
       "scope": "keyword.mnemonic.assembly",
       "settings": {
-        "foreground": "#569cd6",
+        "foreground": "#005ACFFF",
         "fontStyle": "bold"
       }
     },
@@ -113,7 +113,7 @@
       "name": "Register",
       "scope": "variable.register.assembly",
       "settings": {
-        "foreground": "#c586c0",
+        "foreground": "#921F88FF",
         "fontStyle": "bold"
       }
     }
@@ -121,19 +121,19 @@
   "semanticHighlighting": true,
   "semanticTokenColors": {
     "labelDefinition": {
-      "foreground": "#00bdcf",
+      "foreground": "#00A6CFFF",
       "fontStyle": "bold"
     },
     "labelReference": {
-      "foreground": "#00bdcf",
+      "foreground": "#00A6CFFF",
       "fontStyle": "bold"
     },
     "variableDefinition": {
-      "foreground": "#c3db58",
+      "foreground": "#677200FF",
       "fontStyle": "bold"
     },
     "variableReference": {
-      "foreground": "#c3db58",
+      "foreground": "#677200FF",
       "fontStyle": "bold"
     }
   }
