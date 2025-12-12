@@ -116,6 +116,14 @@
         "foreground": "#c586c0",
         "fontStyle": "bold"
       }
+    },
+    {
+      "name": "Other",
+      "scope": "keyword.other.assembly",
+      "settings": {
+        "foreground": "#7824FFFF",
+        "fontStyle": "bold"
+      }
     }
   ],
   "semanticHighlighting": true,

@@ -25,6 +25,9 @@
     },
     {
       "include": "#registers"
+    },
+    {
+      "include": "#other"
     }
   ],
   "repository": {
@@ -116,7 +119,7 @@
       "patterns": [
         {
           "name": "keyword.assembler.assembly",
-          "match": "(?i)\\b(org|end|bits|equ|db|word|times|$)\\b",
+          "match": "(?i)\\b(org|end|bits|equ|db|dw|ds|defb|dm|defm|defw|defs|seek|include|if|ifndef|else|endif|macro|endm|incbin|times|extern|section|public|rept|repti|endr|defc|align|define|defgroup|defvars)\\b",
           "captures": {
             "1": {
               "name": "keyword.assembler.assembly"
@@ -143,6 +146,14 @@
         {
           "name": "variable.register.assembly",
           "match": "(?i)\\b((a|b|c|d|e|h|l|f|bc|de|hl|sp|af|ix|iy|pc|i|r)|(rax|rbx|rcx|rdx|rsi|rdi|rbp|rsp|r8|r9|r10|r11|r12|r13|r14|r15|eax|ebx|ecx|edx|esi|edi|ebp|esp|ax|bx|cx|dx|si|di|bp|sp|al|bl|cl|dl|sil|dil|bpl|spl|ah|bh|ch|dh|r0|r1|r2|r3|r4|r5|r6|r7|r8|r9|r10|r11|r12|r13|r14|r15|lr|pc|sp|fp|ip))\\b"
+        }
+      ]
+    },
+    "other": {
+      "patterns": [
+        {
+          "name": "keyword.other.assembly",
+          "match": "(?i)\\b(nz|z|nc|c|po|pe|p|m)\\b"
         }
       ]
     }
