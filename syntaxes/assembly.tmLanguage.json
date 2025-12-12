@@ -15,6 +15,9 @@
       "include": "#labels"
     },
     {
+      "include": "#variable"
+    },
+    {
       "include": "#assembler"
     },
     {
@@ -101,11 +104,22 @@
         }
       ]
     },
+    "variable": {
+      "patterns": [
+        {
+          "match": "^\\s*([a-zA-Z_][a-zA-Z0-9_]*)\\s+(?i)(equ)\\b",
+          "captures": {
+            "1": {"name": "entity.name.variable.assembly"},
+            "2": {"name": "keyword.assembler.assembly"}
+          }
+        }
+      ]
+    },
     "assembler": {
       "patterns": [
         {
           "name": "keyword.assembler.assembly",
-          "match": "(?i)\\b(org|end|db|word)\\b",
+          "match": "(?i)\\b(org|end|bits|equ|db|word)\\b",
           "captures": {
             "1": {
               "name": "keyword.assembler.assembly"
