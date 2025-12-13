@@ -11,6 +11,9 @@
     "Other"
   ],
   "activationEvents": [],
+  "repository": {
+    "url": "https://github.com/gianluca-rainis/vscode-assembly-extension"
+  },
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
