@@ -4,13 +4,19 @@
   "description": "Color theme and error detector for the most important Assembly languages.",
   "version": "0.0.1",
   "icon": "icon.png",
+  "author": {
+    "name": "Gianluca Rainis",
+    "email": "gianlucarainis@gmail.com",
+    "url": "https://github.com/gianluca-rainis"
+  },
+  "maintainers": ["Gianluca Rainis"],
   "engines": {
     "vscode": "^1.106.1"
   },
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": ["onLanguage:assembly"],
   "repository": {
     "url": "https://github.com/gianluca-rainis/vscode-assembly-extension"
   },
