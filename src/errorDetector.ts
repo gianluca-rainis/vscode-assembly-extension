@@ -11,6 +11,7 @@ export class ErrorDetector {
         Any8BitNumber: 3,
         Any16BitNumber: 4,
         AnySigned16BitNumber: 5,
+        Any: 6
     };
 
     private readonly usageLegend: Record<string, Array<any>> = {
@@ -31,26 +32,119 @@ export class ErrorDetector {
 
         'b': ['0', '1', '2', '3', '4', '5', '6', '7'],
         's': [this.typesOfUsage.Any8BitNumber],
+        'v': ['00h', '08h', '10h', '18h', '20h', '28h', '30h', '38h'],
 
         'd': ['IX', 'IY', 'BC', 'DE', 'HL', 'AF'],
         'str': [this.typesOfUsage.AnyString],
         'var': [this.typesOfUsage.AnyVariable],
         'func': [this.typesOfUsage.AnyLabel],
+        'any': [this.typesOfUsage.Any]
     };
 
     // Assembler usage rules
     private readonly usageRulesAssembler: Record<string, Array<string>> = {
-        'INCLUDE': ['include %str'],
+        'ALIGN': ['ALIGN %addr'],
+        'BITS': ['BITS 16', 'BITS 32', 'BITS 64'],
+        'DB': ['DB %any'],
+        'DEFB': ['DEFB %var', 'DEFB %str, %s'],
+        'DEFC': ['DEFC %var = %any'],
+        'DEFGROUP': ['DEFGROUP 0 { %any }'],
+        'DEFINE': ['DEFINE %any'],
+        'DEFM': ['DEFM %str', 'DEFM %str, %s', 'DEFM %s'],
+        'DEFS': ['DEFS %any'],
+        'DEFVARS': ['DEFVARS 0 { %any }'],
+        'DEFW': ['DEFW %var', 'DEFW %func', 'DEFW %s'],
+        'DM': ['DM %any'],
+        'DS': ['DS.B %[%var %s]', 'DS.W %[%var %s]'],
+        'DW': [],
+        'ELSE': [],
+        'END': [],
+        'ENDIF': [],
+        'ENDM': [],
+        'ENDR': [],
+        'EQU': [],
         'EXTERN': ['extern %var'],
-        'SECTION': ['section %var'],
+        'IF': [],
+        'IFNDEF': [],
+        'INCBIN': [],
+        'INCLUDE': ['include %str'],
+        'MACRO': [],
+        'ORG': [],
         'PUBLIC': ['public %func'],
+        'REPT': [],
+        'REPTI': [],
+        'SECTION': ['section %var'],
+        'SEEK': [],
+        'TIMES': []
     };
 
     // Z80 commands usage rules
     private readonly usageRulesZ80: Record<string, Array<string>> = {
-        'POP': ['pop %d'],
-        'HALT': ['halt'],
-        'IM': ['im %[0 1 2]'],
+        'ADC': ['ADC HL, %ss', 'ADC A, %r', 'ADC A, %nn'],
+        'ADD': ['ADD A, %r', 'ADD A, (HL)', 'ADD A, (IX+%s)', 'ADD A, (IY+%s)', 'ADD HL, %ss', 'ADD IX, %pp', 'ADD IY, %rr'],
+        'AND': ['AND %r', 'AND %nn'],
+        'BIT': ['BIT %b, (HL)', 'BIT %b, (IX+%s)', 'BIT %b, (IY+%s)', 'BIT %b, %r'],
+        'CALL': ['CALL %cc, %addr', 'CALL %addr'],
+        'CCF': ['CCF'],
+        'CP': ['CP %nn', 'CP %r', 'CP (%xx)'],
+        'CPD': ['CPD'],
+        'CPDR': ['CPDR'],
+        'CPI': ['CPI'],
+        'CPIR': ['CPIR'],
+        'CPL': ['CPL'],
+        'DAA': ['DAA'],
+        'DEC': ['DEC %r', 'DEC %ss', 'DEC IX', 'DEC IY'],
+        'DJNZ': ['DJNZ %ee'],
+        'EI': ['EI'],
+        'EX': ['EX (SP), HL', 'EX (SP), IX', 'EX (SP), IY', 'EX AF, AF\'', 'EX DE, HL'],
+        'EXX': ['EXX'],
+        'HALT': ['HALT'],
+        'IM': ['IM %[0 1 2]'],
+        'IN': ['IN A, (%nn)', 'IN %r, (C)'],
+        'INC': ['INC %r', 'INC (HL)', 'INC IX', 'INC IY', 'INC (IX+%s)', 'INC (IY+%s)', 'INC %ss'],
+        'IND': ['IND'],
+        'INDR': ['INDR'],
+        'INI': ['INI'],
+        'INIR': ['INIR'],
+        'JP': ['JP (HL)', 'JP (IX)', 'JP %cc, %addr', 'JP %addr'],
+        'JR': ['JR C, %ee', 'JR %ee', 'JR NC, %ee', 'JR NZ, %ee', 'JR Z, %ee'],
+        'LD': ['LD A, (BC)', 'LD A, (DE)', 'LD A, I', 'LD A, (%nnnn)', 'LD A, R', 'LD (BC), A', 'LD (DE), A', 'LD (HL), %nn', 'LD %dd, %nnnn', 'LD %dd, (%nnnn)', 'LD HL, (%nnnn)', 'LD (HL), %r', 'LD I, A', 'LD IX, %nnnn', 'LD IX, (%nnnn)', 'LD (IX+%s), %nn', 'LD (IX+%s), %r', 'LD IY, %nnnn', 'LD IY, (%nnnn)', 'LD (IY+%s), %nn', 'LD (IY+%s), %r', 'LD (%nnnn), A', 'LD (%nnnn), %dd', 'LD (%nnnn), HL', 'LD (%nnnn), IX', 'LD (%nnnn), IY', 'LD R, A', 'LD %r, (HL)', 'LD %r, (IX+%s)', 'LD %r, (IY+%s)', 'LD %r, %nn', 'LD %r, %r\'', 'LD SP, HL', 'LD SP, IX', 'LD SP, IY'],
+        'LDD': ['LDD'],
+        'LDDR': ['LDDR'],
+        'LDI': ['LDI'],
+        'LDIR': ['LDIR'],
+        'NEG': ['NEG'],
+        'NOP': ['NOP'],
+        'OR': ['OR %r', 'OR %nn'],
+        'OTIR': ['OTIR'],
+        'OUT': ['OUT (C), %r', 'OUT (%nn), A'],
+        'OUTD': ['OUTD'],
+        'OUTI': ['OUTI'],
+        'POP': ['POP IX', 'POP IY', 'POP %qq'],
+        'PUSH': ['PUSH IX', 'PUSH IY', 'PUSH %qq'],
+        'RES': ['RES %b, %r'],
+        'RET': ['RET', 'RET %cc'],
+        'RETI': ['RETI'],
+        'RETN': ['RETN'],
+        'RL': ['RL %r'],
+        'RLA': ['RLA'],
+        'RLC': ['RLC (HL)', 'RLC (IX+%s)', 'RLC (IY+%s)', 'RLC %r'],
+        'RLCA': ['RLCA'],
+        'RLD': ['RLD'],
+        'RR': ['RR %r'],
+        'RRA': ['RRA'],
+        'RRC': ['RRC %r'],
+        'RRCA': ['RRCA'],
+        'RRD': ['RRD'],
+        'RST': ['RST %v'],
+        'SBC': ['SBC A, %r', 'SBC A, %nn', 'SBC HL, %ss'],
+        'SCF': ['SCF'],
+        'SET': ['SET %b, (HL)', 'SET %b, (IX+%s)', 'SET %b, (IY+%s)','SET %b, %r'],
+        'SLA': ['SLA %r'],
+        'SRA': ['SRA %r'],
+        'SRL': ['SRL %r'],
+        'SUB': ['SUB %r', 'SUB %nn', 'SUB (%xx)'],
+        'XOR': ['XOR %r', 'XOR %nn']
     };
 
     constructor(context: vscode.ExtensionContext, langVersion: string) {
@@ -110,6 +204,18 @@ export class ErrorDetector {
                 ...Object.keys(this.usageRulesZ80).map(k => k.toUpperCase()),
                 ...Object.keys(this.usageRulesAssembler).map(k => k.toUpperCase()),
             ]);
+            
+            // Create set of known registers and keywords
+            const knownRegisters = new Set<string>();
+            Object.values(this.usageLegend).forEach(entries => {
+                if (Array.isArray(entries)) {
+                    entries.forEach(entry => {
+                        if (typeof entry === 'string') {
+                            knownRegisters.add(entry.toUpperCase());
+                        }
+                    });
+                }
+            });
 
             let defvarsBraceDepth = 0;
             let macroDepth = 0;
@@ -165,6 +271,20 @@ export class ErrorDetector {
                         identifiers.add(name);
                     }
                 }
+
+                // Handle assembler declarations
+                const externMatch = code.match(/^\s*EXTERN\s+([a-zA-Z_][a-zA-Z0-9_]*)\b/i);
+                const sectionMatch = code.match(/^\s*SECTION\s+([a-zA-Z_][a-zA-Z0-9_]*)\b/i);
+                const declarationMatch = externMatch || sectionMatch;
+
+                if (declarationMatch) {
+                    const name = declarationMatch[1];
+                    const start = code.indexOf(name);
+
+                    if (!this.isInsideString(code, start, name.length, stringRegex)) {
+                        identifiers.add(name);
+                    }
+                }
             });
 
             const reportDuplicates = (map: Map<string, number[]>, type: 'label' | 'variable') => {
@@ -212,6 +332,10 @@ export class ErrorDetector {
                     }
 
                     if (knownMnemonics.has(nameUpper)) {
+                        continue;
+                    }
+
+                    if (knownRegisters.has(nameUpper)) {
                         continue;
                     }
 
@@ -369,9 +493,7 @@ export class ErrorDetector {
                 const startstr = start >= 0 ? start : code.indexOf(mnemonic) + mnemonic.length;
                 const endstr = code.length;
 
-                const message = rules.length === 1 
-                    ? `Invalid usage: ${errors[0] || rules[0]}`
-                    : `No valid form found. Tried ${rules.length} variant(s): ${rules.join(' | ')}`;
+                const message = `Invalid usage. Allowed variant(s): ${rules.join(' | ')}`;
 
                 diags.push({
                     range: new vscode.Range(lineIndex, Math.max(0, startstr), lineIndex, endstr),
@@ -390,19 +512,21 @@ export class ErrorDetector {
 
         try {
             const tokens = rule.trim().match(/%\[[^\]]*]|%\w+|\S+/g) || [];
-            const operandsTokens = tokens.slice(1); // Ignore the command
+            const operandsTokens = tokens.slice(1).filter(t => !/^[,()]+$/.test(t)); // Ignore
 
             for (const token of operandsTokens) {
-                if (token.startsWith('%[') && token.endsWith(']')) {
-                    const content = token.slice(2, -1).trim();
+                const cleanToken = token.replace(/,+$/, ''); // Clear the token from operands
+
+                if (cleanToken.startsWith('%[') && cleanToken.endsWith(']')) {
+                    const content = cleanToken.slice(2, -1).trim();
                     const opts = content.split(/\s+/).map(s => s.trim().toUpperCase()).filter(Boolean);
 
                     placeholders.push({ kind: 'options', options: new Set(opts) });
                     continue;
                 }
 
-                if (token.startsWith('%')) {
-                    const key = token.slice(1);
+                if (cleanToken.startsWith('%')) {
+                    const key = cleanToken.slice(1);
                     const legendEntry = this.usageLegend[key];
 
                     if (Array.isArray(legendEntry) && legendEntry.every(v => typeof v === 'string')) {
@@ -412,13 +536,13 @@ export class ErrorDetector {
                         placeholders.push({ kind: 'any' }); // Known placeholder type but not a fixed set
                     }
                     else {
-                        placeholders.push({ kind: 'literal', literal: token });
+                        placeholders.push({ kind: 'literal', literal: cleanToken.startsWith('%') ? cleanToken.slice(1) : cleanToken });
                     }
 
                     continue;
                 }
 
-                placeholders.push({ kind: 'literal', literal: token });
+                placeholders.push({ kind: 'literal', literal: cleanToken });
             }
         } catch (error) {
             console.error("[Assembly][Error][Error Detector] " + error);
