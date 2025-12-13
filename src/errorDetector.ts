@@ -25,7 +25,7 @@ export class ErrorDetector {
 
         'nn': [this.typesOfUsage.Any8BitNumber],
         'nnnn': [this.typesOfUsage.Any16BitNumber],
-        'addr': [this.typesOfUsage.Any16BitNumber, this.typesOfUsage.AnyLabel],
+        'addr': [this.typesOfUsage.Any8BitNumber, this.typesOfUsage.Any16BitNumber, this.typesOfUsage.AnyLabel, this.typesOfUsage.AnyVariable],
         'ee': [this.typesOfUsage.AnySigned16BitNumber, this.typesOfUsage.AnyLabel],
 
         'cc': ['NZ', 'Z', 'NC', 'C', 'PO', 'PE', 'P', 'M'],
@@ -80,8 +80,8 @@ export class ErrorDetector {
 
     // Z80 commands usage rules
     private readonly usageRulesZ80: Record<string, Array<string>> = {
-        'ADC': ['ADC HL, %ss', 'ADC A, %r', 'ADC A, %nn'],
-        'ADD': ['ADD A, %r', 'ADD A, (HL)', 'ADD A, (IX+%s)', 'ADD A, (IY+%s)', 'ADD HL, %ss', 'ADD IX, %pp', 'ADD IY, %rr'],
+        'ADC': ['ADC HL, %ss', 'ADC A, %r', 'ADC A, %nn', 'ADC $r', 'ADC %nn'],
+        'ADD': ['ADD A, %r', 'ADD A, (HL)', 'ADD A, (IX+%s)', 'ADD A, (IY+%s)', 'ADD HL, %ss', 'ADD IX, %pp', 'ADD IY, %rr', 'ADD %any'],
         'AND': ['AND %r', 'AND %nn'],
         'BIT': ['BIT %b, (HL)', 'BIT %b, (IX+%s)', 'BIT %b, (IY+%s)', 'BIT %b, %r'],
         'CALL': ['CALL %cc, %addr', 'CALL %addr'],
@@ -108,7 +108,7 @@ export class ErrorDetector {
         'INIR': ['INIR'],
         'JP': ['JP (HL)', 'JP (IX)', 'JP %cc, %addr', 'JP %addr'],
         'JR': ['JR C, %ee', 'JR %ee', 'JR NC, %ee', 'JR NZ, %ee', 'JR Z, %ee'],
-        'LD': ['LD A, (BC)', 'LD A, (DE)', 'LD A, I', 'LD A, (%nnnn)', 'LD A, R', 'LD (BC), A', 'LD (DE), A', 'LD (HL), %nn', 'LD %dd, %nnnn', 'LD %dd, (%nnnn)', 'LD HL, (%nnnn)', 'LD (HL), %r', 'LD I, A', 'LD IX, %nnnn', 'LD IX, (%nnnn)', 'LD (IX+%s), %nn', 'LD (IX+%s), %r', 'LD IY, %nnnn', 'LD IY, (%nnnn)', 'LD (IY+%s), %nn', 'LD (IY+%s), %r', 'LD (%nnnn), A', 'LD (%nnnn), %dd', 'LD (%nnnn), HL', 'LD (%nnnn), IX', 'LD (%nnnn), IY', 'LD R, A', 'LD %r, (HL)', 'LD %r, (IX+%s)', 'LD %r, (IY+%s)', 'LD %r, %nn', 'LD %r, %r\'', 'LD SP, HL', 'LD SP, IX', 'LD SP, IY'],
+        'LD': ['LD A, (BC)', 'LD A, (DE)', 'LD A, I', 'LD A, (%addr)', 'LD A, R', 'LD (BC), A', 'LD (DE), A', 'LD (HL), %nn', 'LD %dd, %addr', 'LD %dd, (%addr)', 'LD HL, (%addr)', 'LD (HL), %r', 'LD I, A', 'LD IX, %addr', 'LD IX, (%addr)', 'LD (IX+%s), %nn', 'LD (IX+%s), %r', 'LD IY, %addr', 'LD IY, (%addr)', 'LD (IY+%s), %nn', 'LD (IY+%s), %r', 'LD (%addr), A', 'LD (%addr), %dd', 'LD (%addr), HL', 'LD (%addr), IX', 'LD (%addr), IY', 'LD R, A', 'LD %r, (HL)', 'LD %r, (IX+%s)', 'LD %r, (IY+%s)', 'LD %r, %nn', 'LD %r, %r\'', 'LD SP, HL', 'LD SP, IX', 'LD SP, IY'],
         'LDD': ['LDD'],
         'LDDR': ['LDDR'],
         'LDI': ['LDI'],
@@ -273,9 +273,13 @@ export class ErrorDetector {
                 }
 
                 // Handle assembler declarations
-                const externMatch = code.match(/^\s*EXTERN\s+([a-zA-Z_][a-zA-Z0-9_]*)\b/i);
-                const sectionMatch = code.match(/^\s*SECTION\s+([a-zA-Z_][a-zA-Z0-9_]*)\b/i);
-                const declarationMatch = externMatch || sectionMatch;
+                const extern = code.match(/^\s*EXTERN\s+([a-zA-Z_][a-zA-Z0-9_]*)\b/i);
+                const section = code.match(/^\s*SECTION\s+([a-zA-Z_][a-zA-Z0-9_]*)\b/i);
+                const defb = code.match(/^\s*DEFB\s+([a-zA-Z_][a-zA-Z0-9_]*)\b/i);
+                const defw = code.match(/^\s*DEFW\s+([a-zA-Z_][a-zA-Z0-9_]*)\b/i);
+                const defc = code.match(/^\s*DEFC\s+([a-zA-Z_][a-zA-Z0-9_]*)\b/i);
+                const macro = code.match(/^\s*MACRO\s+([a-zA-Z_][a-zA-Z0-9_]*)\b/i);
+                const declarationMatch = extern || section || defb || defw || defc || macro;
 
                 if (declarationMatch) {
                     const name = declarationMatch[1];
@@ -469,6 +473,27 @@ export class ErrorDetector {
                     else if (placehold.kind === 'options' && placehold.options) {
                         valid = placehold.options.has(operandUpper);
                     }
+                    else if (placehold.kind === 'pattern' && placehold.regex) {
+                        const matchPattern = placehold.regex.exec(operand);
+
+                        if (matchPattern) {
+                            const captured = matchPattern[1] ?? '';
+                            const capturedUpper = captured.toUpperCase();
+
+                            if (placehold.set) {
+                                valid = placehold.set.has(capturedUpper);
+                            }
+                            else if (placehold.options) {
+                                valid = placehold.options.has(capturedUpper);
+                            }
+                            else if (placehold.literal) {
+                                valid = capturedUpper === placehold.literal.toUpperCase();
+                            }
+                            else {
+                                valid = true; // Generic placeholder
+                            }
+                        }
+                    }
                     else if (placehold.kind === 'literal' && placehold.literal) {
                         valid = operandUpper === placehold.literal.toUpperCase();
                     }
@@ -507,8 +532,8 @@ export class ErrorDetector {
         }
     }
 
-    private parseUsageRule(rule: string): { placeholders: Array<{ kind: 'register-set' | 'options' | 'literal' | 'any'; set?: Set<string>; options?: Set<string>; literal?: string; }> } {
-        const placeholders: Array<{ kind: 'register-set' | 'options' | 'literal' | 'any'; set?: Set<string>; options?: Set<string>; literal?: string; }> = [];
+    private parseUsageRule(rule: string): { placeholders: Array<{ kind: 'register-set' | 'options' | 'literal' | 'any' | 'pattern'; set?: Set<string>; options?: Set<string>; literal?: string; regex?: RegExp; }> } {
+        const placeholders: Array<{ kind: 'register-set' | 'options' | 'literal' | 'any' | 'pattern'; set?: Set<string>; options?: Set<string>; literal?: string; regex?: RegExp; }> = [];
 
         try {
             const tokens = rule.trim().match(/%\[[^\]]*]|%\w+|\S+/g) || [];
@@ -523,6 +548,34 @@ export class ErrorDetector {
 
                     placeholders.push({ kind: 'options', options: new Set(opts) });
                     continue;
+                }
+
+                // Support operands in ()
+                if (cleanToken.includes('%') && !cleanToken.startsWith('%')) {
+                    const keyMatch = cleanToken.match(/%([A-Za-z0-9_]+)/);
+
+                    if (keyMatch) {
+                        const key = keyMatch[1];
+                        const legendEntry = this.usageLegend[key];
+
+                        let set: Set<string> | undefined;
+                        let options: Set<string> | undefined;
+                        let literal: string | undefined;
+
+                        if (Array.isArray(legendEntry) && legendEntry.every(v => typeof v === 'string')) {
+                            set = new Set(legendEntry.map(v => v.toUpperCase()));
+                        }
+                        else if (legendEntry === undefined) {
+                            literal = key;
+                        }
+
+                        const escapedToken = this.escapeRegex(cleanToken);
+                        const escapedPlaceholder = this.escapeRegex('%' + key);
+                        const regex = new RegExp('^' + escapedToken.replace(escapedPlaceholder, '(.+)') + '$', 'i');
+
+                        placeholders.push({ kind: 'pattern', regex, set, options, literal });
+                        continue;
+                    }
                 }
 
                 if (cleanToken.startsWith('%')) {
@@ -549,5 +602,9 @@ export class ErrorDetector {
         }
         
         return { placeholders };
+    }
+
+    private escapeRegex(value: string): string {
+        return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     }
 }
