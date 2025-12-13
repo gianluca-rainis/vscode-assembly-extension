@@ -100,7 +100,7 @@
       "patterns": [
         {
           "name": "entity.name.label.assembly",
-          "match": "^\\s*([a-zA-Z_][a-zA-Z0-9_]*)\\s*:"
+          "match": "^\\s*([a-zA-Z_.][a-zA-Z0-9_.]*)\\s*:"
         }
       ]
     },
@@ -127,7 +127,7 @@
       "patterns": [
         {
           "name": "keyword.mnemonic.assembly",
-          "match": "(?i)\\b((adc|add|and|bit|call|ccf|cp|cpd|cpdr|cpi|cpir|cpl|daa|dec|djnz|ei|ex|exx|halt|im|in|inc|ind|indr|ini|inir|jp|jr|ld|ldd|lddr|ldi|ldir|neg|nop|or|otdr|otir|out|outd|outi|pop|push|res|ret|reti|retn|rl|rla|rlc|rlca|rld|rr|rra|rrc|rrca|rrd|rst|sbc|scf|set|sla|sra|srl|sub|xor)|(mov|movl|movq|movb|movw|add|sub|mul|div|imul|idiv|xor|and|or|not|shl|shr|sal|sar|rol|ror|lea|push|pop|call|ret|jmp|je|jne|jz|jnz|jl|jg|jle|jge|ja|jb|jae|jbe|jo|jno|js|jns|ldr|str|ldm|stm|add|sub|mul|cmp|b|bl|beq|bne|blt|bgt|ble|bge|lw|sw|addi|beq|bne))\\b",
+          "match": "(?i)\\b((adc|add|and|bit|call|ccf|cp|cpd|cpdr|cpi|cpir|cpl|daa|dec|djnz|ei|ex|exx|halt|im|in|inc|ind|indr|ini|inir|jp|jr|ld|ldd|lddr|ldi|ldir|neg|nop|or|otdr|otir|out|outd|outi|pop|push|res|ret|reti|retn|rl|rla|rlc|rlca|rld|rr|rra|rrc|rrca|rrd|rst|sbc|scf|set|sla|sra|srl|sub|xor)|(mov|movl|movq|movb|movw|add|sub|mul|div|imul|idiv|xor|and|or|not|shl|shr|sal|sar|rol|ror|lea|push|pop|call|ret|jmp|je|jne|jz|jnz|jl|jg|jle|jge|ja|jb|jae|jbe|jo|jno|js|jns|ldr|str|ldm|stm|add|sub|mul|cmp|bl|beq|bne|blt|bgt|ble|bge|lw|sw|addi|beq|bne))\\b",
           "captures": {
             "1": {
               "name": "keyword.mnemonic.assembly"

@@ -144,7 +144,7 @@ export class ErrorDetector {
         'SRA': ['SRA %r'],
         'SRL': ['SRL %r'],
         'SUB': ['SUB %r', 'SUB %nn', 'SUB (%xx)'],
-        'XOR': ['XOR %r', 'XOR %nn']
+        'XOR': ['XOR %r', 'XOR %nn', 'XOR %r, %r', 'XOR %r, %addr', 'XOR %d, %addr']
     };
 
     constructor(context: vscode.ExtensionContext, langVersion: string) {
@@ -238,7 +238,7 @@ export class ErrorDetector {
                     macroDepth = Math.max(0, macroDepth - 1);
                 }
 
-                const labelMatch = code.match(/^\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*:/);
+                const labelMatch = code.match(/^\s*([a-zA-Z_.][a-zA-Z0-9_.]*)\s*:/);
 
                 if (labelMatch) {
                     const name = labelMatch[1];
@@ -253,10 +253,10 @@ export class ErrorDetector {
                     }
                 }
 
-                const equMatch = code.match(/^\s*([a-zA-Z_][a-zA-Z0-9_]*)\s+([eE][qQ][uU])\b/);
-                const assignMatch = code.match(/^\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*=\s*/);
-                const dsMatch = code.match(/^\s*([a-zA-Z_][a-zA-Z0-9_]*)\s+DS\.[BWLD]/i);
-                const plainDefvarsName = defvarsBraceDepth > 0 ? code.match(/^\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*$/) : null;
+                const equMatch = code.match(/^\s*([a-zA-Z_.][a-zA-Z0-9_.]*)\s+([eE][qQ][uU])\b/);
+                const assignMatch = code.match(/^\s*([a-zA-Z_.][a-zA-Z0-9_.]*)\s*=\s*/);
+                const dsMatch = code.match(/^\s*([a-zA-Z_.][a-zA-Z0-9_.]*)\s+DS\.[BWLD]/i);
+                const plainDefvarsName = defvarsBraceDepth > 0 ? code.match(/^\s*([a-zA-Z_.][a-zA-Z0-9_.]*)\s*$/) : null;
                 const variableMatch = equMatch || assignMatch || dsMatch || plainDefvarsName;
 
                 if (variableMatch) {
@@ -273,12 +273,12 @@ export class ErrorDetector {
                 }
 
                 // Handle assembler declarations
-                const extern = code.match(/^\s*EXTERN\s+([a-zA-Z_][a-zA-Z0-9_]*)\b/i);
-                const section = code.match(/^\s*SECTION\s+([a-zA-Z_][a-zA-Z0-9_]*)\b/i);
-                const defb = code.match(/^\s*DEFB\s+([a-zA-Z_][a-zA-Z0-9_]*)\b/i);
-                const defw = code.match(/^\s*DEFW\s+([a-zA-Z_][a-zA-Z0-9_]*)\b/i);
-                const defc = code.match(/^\s*DEFC\s+([a-zA-Z_][a-zA-Z0-9_]*)\b/i);
-                const macro = code.match(/^\s*MACRO\s+([a-zA-Z_][a-zA-Z0-9_]*)\b/i);
+                const extern = code.match(/^\s*EXTERN\s+([a-zA-Z_.][a-zA-Z0-9_.]*)\b/i);
+                const section = code.match(/^\s*SECTION\s+([a-zA-Z_.][a-zA-Z0-9_.]*)\b/i);
+                const defb = code.match(/^\s*DEFB\s+([a-zA-Z_.][a-zA-Z0-9_.]*)\b/i);
+                const defw = code.match(/^\s*DEFW\s+([a-zA-Z_.][a-zA-Z0-9_.]*)\b/i);
+                const defc = code.match(/^\s*DEFC\s+([a-zA-Z_.][a-zA-Z0-9_.]*)\b/i);
+                const macro = code.match(/^\s*MACRO\s+([a-zA-Z_.][a-zA-Z0-9_.]*)\b/i);
                 const declarationMatch = extern || section || defb || defw || defc || macro;
 
                 if (declarationMatch) {
@@ -321,7 +321,7 @@ export class ErrorDetector {
                 // Instruction usage validator
                 this.validateInstructionUsage(code, lineIndex, diags);
 
-                const refPattern = /\b([a-zA-Z_][a-zA-Z0-9_]*)\b/g;
+                const refPattern = /(?<![a-zA-Z0-9_.])([a-zA-Z_.][a-zA-Z0-9_.]*)(?![a-zA-Z0-9_.])/g;
                 let matches: RegExpExecArray | null;
 
                 refPattern.lastIndex = 0;
@@ -387,7 +387,7 @@ export class ErrorDetector {
         try {
             // Don't check labels
             let rest = code;
-            const labelMatch = rest.match(/^\s*[A-Za-z_][A-Za-z0-9_]*\s*:\s*(.*)$/);
+            const labelMatch = rest.match(/^\s*[A-Za-z_.][A-Za-z0-9_.]*\s*:\s*(.*)$/);
 
             if (labelMatch) {
                 rest = labelMatch[1];
@@ -408,12 +408,17 @@ export class ErrorDetector {
                 return;
             }
 
-            // Parse operands: split by ','
+            // If any don't count the number of operands
+            const hasAnyPlaceholder = rules.some(r => r.includes('%any'));
+            
+            // Split operands with ','
             const operandsOriginal = operandsStr;
-            const operands = operandsStr
-                .split(',')
-                .map(s => s.trim())
-                .filter(s => s.length > 0);
+            const operands = hasAnyPlaceholder && operandsStr.trim().length > 0
+                ? [operandsStr.trim()]
+                : operandsStr
+                    .split(',')
+                    .map(s => s.trim())
+                    .filter(s => s.length > 0);
 
             // Try each rule for the keyword
             let anyRuleMatched = false;
