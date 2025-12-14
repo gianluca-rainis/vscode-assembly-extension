@@ -14,11 +14,12 @@
     "vscode": "^1.106.1"
   },
   "categories": [
-    "Other"
+    "Programming Languages"
   ],
   "activationEvents": ["onLanguage:assembly"],
   "repository": {
-    "url": "https://github.com/gianluca-rainis/vscode-assembly-extension"
+    "url": "https://github.com/gianluca-rainis/vscode-assembly-extension",
+    "type": "git"
   },
   "main": "./out/extension.js",
   "contributes": {
@@ -27,7 +28,7 @@
     ],
     "languages": [{
       "id": "assembly",
-      "extensions": [".s", ".asm"],
+      "extensions": [".s", ".asm", ".nasm", ".yasm", ".inc"],
       "aliases": ["Assembly", "assembly"],
       "filenames": [],
       "configuration": "./language-configuration.json"

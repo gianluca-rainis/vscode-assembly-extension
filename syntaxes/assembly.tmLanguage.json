@@ -1,18 +1,19 @@
 {
   "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
   "name": "Assembly",
+  "scopeName": "source.assembly",
   "patterns": [
     {
       "include": "#comments"
+    },
+    {
+      "include": "#labels"
     },
     {
       "include": "#strings"
     },
     {
       "include": "#numbers"
-    },
-    {
-      "include": "#labels"
     },
     {
       "include": "#variable"
@@ -152,6 +153,5 @@
         }
       ]
     }
-  },
-  "scopeName": "source.assembly"
+  }
 }
