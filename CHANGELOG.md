@@ -1,18 +1,33 @@
 # Changelog
-All notable changes to the "assembly" extension will be documented in this file.
+All notable changes to the "Z80 Assembly" extension will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
 ### Added
-- Author and activation info in package.json
-- This file
+
 
 ### Changed
 
 
 ### Removed
+
+
+## [v1.0.0] - 2025-12-22
+
+### Added
+- Z80 Assembly full-supported
+
+### Fixed
+- Label with the . in the name
+- Label references with the . in the name
+
+### Changed
+- Renamed the extension from *Assembly* to *Z80 Assembly*
+
+### Removed
+- x86-64 Assembly references
 
 
 ## [v0.0.1] - 2025-12-13
@@ -37,3 +52,4 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 [unreleased]: https://github.com/gianluca-rainis/vscode-assembly-extension
 [v0.0.1]: https://github.com/gianluca-rainis/vscode-assembly-extension/releases/tag/v0.0.1
+[v1.0.0]: https://github.com/gianluca-rainis/vscode-assembly-extension/releases/tag/v1.0.0
