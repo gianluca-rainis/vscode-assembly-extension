@@ -1,5 +1,5 @@
 {
-  "name": "Assembly Light",
+  "name": "Z80 Assembly Light",
   "type": "light",
   "colors": {
     "editor.background": "#E9E9E9FF",

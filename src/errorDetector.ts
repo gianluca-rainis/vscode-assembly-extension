@@ -160,7 +160,7 @@ export class ErrorDetector {
 
             return first === Infinity ? line : line.substring(0, first);
         } catch (error) {
-            console.error("[Assembly][Error][Error Detector] " + error);
+            console.error("[Z80 Assembly][Error][Error Detector] " + error);
             return "";
         }
     }
@@ -179,7 +179,7 @@ export class ErrorDetector {
                 }
             }
         } catch (error) {
-            console.error("[Assembly][Error][Error Detector] " + error);
+            console.error("[Z80 Assembly][Error][Error Detector] " + error);
         }
 
         return false;
@@ -187,7 +187,7 @@ export class ErrorDetector {
 
     public async validate(document: vscode.TextDocument, diagnostics: vscode.DiagnosticCollection): Promise<void> {
         try {
-            console.log("[Assembly][Debug] Assembly Error Detector Started");
+            console.log("[Z80 Assembly][Debug] Z80 Assembly Error Detector Started");
 
             if (document.languageId !== 'assembly') {
                 return;
@@ -307,7 +307,7 @@ export class ErrorDetector {
                                 range: new vscode.Range(lineIdx, start, lineIdx, start + name.length),
                                 severity: vscode.DiagnosticSeverity.Error,
                                 message: `Duplicate definition: ${type} '${name}'`,
-                                source: 'assembly'
+                                source: 'Z80 Assembly'
                             });
                         }
                     });
@@ -351,7 +351,7 @@ export class ErrorDetector {
                         range: new vscode.Range(lineIndex, index, lineIndex, index + name.length),
                         severity: vscode.DiagnosticSeverity.Error,
                         message: `Reference to an undefined symbol: '${name}'`,
-                        source: 'assembly'
+                        source: 'Z80 Assembly'
                     });
                 }
             });
@@ -364,7 +364,7 @@ export class ErrorDetector {
                     range: new vscode.Range(0, 0, 0, 1),
                     severity: vscode.DiagnosticSeverity.Error,
                     message: 'DEFVARS has incorrectly closed parentheses',
-                    source: 'assembly'
+                    source: 'Z80 Assembly'
                 });
             }
 
@@ -373,13 +373,13 @@ export class ErrorDetector {
                     range: new vscode.Range(0, 0, 0, 1),
                     severity: vscode.DiagnosticSeverity.Error,
                     message: 'MACRO block not closed (need ENDM)',
-                    source: 'assembly'
+                    source: 'Z80 Assembly'
                 });
             }
 
             diagnostics.set(document.uri, diags);
         } catch (error) {
-            console.error("[Assembly][Error][Error Detector] " + error);
+            console.error("[Z80 Assembly][Error][Error Detector] " + error);
         }
     }
 
@@ -529,11 +529,11 @@ export class ErrorDetector {
                     range: new vscode.Range(lineIndex, Math.max(0, startstr), lineIndex, endstr),
                     severity: vscode.DiagnosticSeverity.Error,
                     message: message,
-                    source: 'assembly'
+                    source: 'Z80 Assembly'
                 });
             }
         } catch (error) {
-            console.error("[Assembly][Error][Error Detector] " + error);
+            console.error("[Z80 Assembly][Error][Error Detector] " + error);
         }
     }
 
@@ -603,7 +603,7 @@ export class ErrorDetector {
                 placeholders.push({ kind: 'literal', literal: cleanToken });
             }
         } catch (error) {
-            console.error("[Assembly][Error][Error Detector] " + error);
+            console.error("[Z80 Assembly][Error][Error Detector] " + error);
         }
         
         return { placeholders };

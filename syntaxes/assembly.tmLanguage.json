@@ -1,6 +1,6 @@
 {
   "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
-  "name": "Assembly",
+  "name": "Z80 Assembly",
   "scopeName": "source.assembly",
   "patterns": [
     {
@@ -128,7 +128,7 @@
       "patterns": [
         {
           "name": "keyword.mnemonic.assembly",
-          "match": "(?i)\\b((adc|add|and|bit|call|ccf|cp|cpd|cpdr|cpi|cpir|cpl|daa|dec|djnz|ei|ex|exx|halt|im|in|inc|ind|indr|ini|inir|jp|jr|ld|ldd|lddr|ldi|ldir|neg|nop|or|otdr|otir|out|outd|outi|pop|push|res|ret|reti|retn|rl|rla|rlc|rlca|rld|rr|rra|rrc|rrca|rrd|rst|sbc|scf|set|sla|sra|srl|sub|xor)|(mov|movl|movq|movb|movw|add|sub|mul|div|imul|idiv|xor|and|or|not|shl|shr|sal|sar|rol|ror|lea|push|pop|call|ret|jmp|je|jne|jz|jnz|jl|jg|jle|jge|ja|jb|jae|jbe|jo|jno|js|jns|ldr|str|ldm|stm|add|sub|mul|cmp|bl|beq|bne|blt|bgt|ble|bge|lw|sw|addi|beq|bne))\\b",
+          "match": "(?i)\\b(adc|add|and|bit|call|ccf|cp|cpd|cpdr|cpi|cpir|cpl|daa|dec|djnz|ei|ex|exx|halt|im|in|inc|ind|indr|ini|inir|jp|jr|ld|ldd|lddr|ldi|ldir|neg|nop|or|otdr|otir|out|outd|outi|pop|push|res|ret|reti|retn|rl|rla|rlc|rlca|rld|rr|rra|rrc|rrca|rrd|rst|sbc|scf|set|sla|sra|srl|sub|xor)\\b",
           "captures": {
             "1": {
               "name": "keyword.mnemonic.assembly"
@@ -141,7 +141,7 @@
       "patterns": [
         {
           "name": "variable.register.assembly",
-          "match": "(?i)\\b((a|b|c|d|e|h|l|f|bc|de|hl|sp|af|ix|iy|pc|i|r)|(rax|rbx|rcx|rdx|rsi|rdi|rbp|rsp|r8|r9|r10|r11|r12|r13|r14|r15|eax|ebx|ecx|edx|esi|edi|ebp|esp|ax|bx|cx|dx|si|di|bp|sp|al|bl|cl|dl|sil|dil|bpl|spl|ah|bh|ch|dh|r0|r1|r2|r3|r4|r5|r6|r7|r8|r9|r10|r11|r12|r13|r14|r15|lr|pc|sp|fp|ip))\\b"
+          "match": "(?i)\\b(a|b|c|d|e|h|l|f|bc|de|hl|sp|af|ix|iy|pc|i|r)\\b"
         }
       ]
     },

@@ -1,7 +1,7 @@
 {
   "name": "assembly",
-  "displayName": "Assembly",
-  "description": "Color theme and error detector for the most important Assembly languages.",
+  "displayName": "Z80 Assembly",
+  "description": "Color theme and error detector for the Z80 Assembly language.",
   "version": "0.0.1",
   "icon": "icon.png",
   "author": {
@@ -28,8 +28,8 @@
     ],
     "languages": [{
       "id": "assembly",
-      "extensions": [".s", ".asm", ".nasm", ".yasm", ".inc"],
-      "aliases": ["Assembly", "assembly"],
+      "extensions": [".s", ".asm"],
+      "aliases": ["Z80 Assembly", "Z80", "Assembly", "assembly"],
       "filenames": [],
       "configuration": "./language-configuration.json"
     }],
@@ -39,12 +39,12 @@
       "path": "./syntaxes/assembly.tmLanguage.json"
     }],
     "themes": [{
-      "label": "Assembly Dark",
+      "label": "Z80 Assembly Dark",
       "uiTheme": "vs-dark",
       "path": "./themes/assembly-dark.json"
     },
     {
-      "label": "Assembly Light",
+      "label": "Z80 Assembly Light",
       "uiTheme": "vs",
       "path": "./themes/assembly-light.json"
     }],
@@ -52,22 +52,22 @@
       {
         "id": "labelDefinition",
         "superType": "entity",
-        "description": "Assembly label definition"
+        "description": "Z80 Assembly label definition"
       },
       {
         "id": "labelReference",
         "superType": "entity",
-        "description": "Assembly label reference"
+        "description": "Z80 Assembly label reference"
       },
       {
         "id": "variableDefinition",
         "superType": "entity",
-        "description": "Assembly variable definition"
+        "description": "Z80 Assembly variable definition"
       },
       {
         "id": "variableReference",
         "superType": "entity",
-        "description": "Assembly variable reference"
+        "description": "Z80 Assembly variable reference"
       }
     ],
     "semanticTokenScopes": [

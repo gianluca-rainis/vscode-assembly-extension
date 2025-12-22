@@ -12,7 +12,7 @@ const provider: vscode.DocumentSemanticTokensProvider = {
       const text = document.getText();
       const lines = text.split('\n');
 
-      console.log("[Assembly][Debug] Provide Semantic Tokens Started");
+      console.log("[Z80 Assembly][Debug] Provide Semantic Tokens Started");
 
       function foundAndPrepareDefinitionsAndReferences(defPattern: RegExp, refPattern: RegExp, definitionType: string, referenceType: string, skipNumbers: boolean = false) {
         try {
@@ -151,7 +151,7 @@ const provider: vscode.DocumentSemanticTokensProvider = {
             }
           });
         } catch (error) {
-          console.error("[Assembly][Error][Provide Semantic Tokens] " + error);
+          console.error("[Z80 Assembly][Error][Provide Semantic Tokens] " + error);
         }
       }
 
@@ -241,7 +241,7 @@ const provider: vscode.DocumentSemanticTokensProvider = {
             }
           });
         } catch (error) {
-          console.error("[Assembly][Error][Provide Semantic Tokens] " + error);
+          console.error("[Z80 Assembly][Error][Provide Semantic Tokens] " + error);
         }
       }
 
@@ -358,11 +358,11 @@ const provider: vscode.DocumentSemanticTokensProvider = {
             }
           });
         } catch (error) {
-          console.error("[Assembly][Error][Provide Semantic Tokens] " + error);
+          console.error("[Z80 Assembly][Error][Provide Semantic Tokens] " + error);
         }
       }
 
-      foundAndPrepareDefinitionsAndReferences(/^\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*:/, /\b([a-zA-Z_][a-zA-Z0-9_]*)\b/g, 'labelDefinition', 'labelReference');
+      foundAndPrepareDefinitionsAndReferences(/^\s*([a-zA-Z_.][a-zA-Z0-9_.]*)\s*:/, /(?<![a-zA-Z0-9_.])([a-zA-Z_.][a-zA-Z0-9_.]*)(?![a-zA-Z0-9_.])/g, 'labelDefinition', 'labelReference');
       foundAndPrepareDefinitionsAndReferences(/^\s*([a-zA-Z_][a-zA-Z0-9_]*)\s+([eE][qQ][uU])\b/, /\b([a-zA-Z_][a-zA-Z0-9_]*)\b/g, 'variableDefinition', 'variableReference');
       foundAndPrepareDefinitionsAndReferences(/(?:^|\s)(?:include|seek|extern|public|define|section|defc|defs|defm|defw|defgroup|defvars|macro)\s+([a-zA-Z_][a-zA-Z0-9_]*)/gi, /\b([a-zA-Z_][a-zA-Z0-9_]*)\b/g, 'variableDefinition', 'variableReference', true);
       foundAndPrepareDefinitionsAndReferences(/^\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*=\s*/g, /\b([a-zA-Z_][a-zA-Z0-9_]*)\b/g, 'variableDefinition', 'variableReference');
@@ -372,7 +372,7 @@ const provider: vscode.DocumentSemanticTokensProvider = {
 
       return tokensBuilder.build();
     } catch (error) {
-      console.error("[Assembly][Error] " + error);
+      console.error("[Z80 Assembly][Error] " + error);
       return null;
     }
 	}
@@ -383,13 +383,13 @@ const provider: vscode.DocumentSemanticTokensProvider = {
 export function activate(context: vscode.ExtensionContext) {
   const selector = { language: 'assembly', scheme: 'file' };
 
-  console.log("[Assembly][Debug] Assembly Extension Active");
+  console.log("[Z80 Assembly][Debug] Z80 Assembly Extension Active");
 	
 	// Register the Semantic Token Provider for Assembly
   try {
     vscode.languages.registerDocumentSemanticTokensProvider(selector, provider, legend);
   } catch (error) {
-    console.error("[Assembly][Error] " + error);
+    console.error("[Z80 Assembly][Error] " + error);
   }
 
   try {
@@ -400,7 +400,7 @@ export function activate(context: vscode.ExtensionContext) {
     const errorDetector = new ErrorDetector(context, "Z80");
 
     function runValidate(doc: vscode.TextDocument) {
-      errorDetector.validate(doc, diagnostics).catch(error => console.error('[Assembly][Error] Validation failed: ', error));
+      errorDetector.validate(doc, diagnostics).catch(error => console.error('[Z80 Assembly][Error] Validation failed: ', error));
     }
 
     const active = vscode.window.activeTextEditor?.document;
@@ -415,7 +415,7 @@ export function activate(context: vscode.ExtensionContext) {
       vscode.workspace.onDidSaveTextDocument(doc => runValidate(doc))
     );
   } catch (error) {
-    console.error("[Assembly][Error] " + error);
+    console.error("[Z80 Assembly][Error] " + error);
   }
 }
 
